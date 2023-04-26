@@ -11,8 +11,8 @@
             <td>${person.firstName}</td>
             <td>${person.lastName}</td>
             <td>${person.age}</td>   
-             <td>   <button class="btn btn-primary" id="edit" data-edit-id="${person.Id}">Edit</button> </td>          
-             <td>   <button class="btn btn-primary" id="delete" data-delete-id="${person.Id}">Delete</button> </td>          
+             <td>   <button class="btn btn-primary" id="edit" data-edit-id="${person.id}">Edit</button> </td>          
+             <td>   <button class="btn btn-primary" id="delete" data-delete-id="${person.id}">Delete</button> </td>          
        </tr>`)
             });
         });
@@ -50,12 +50,33 @@
         $("#editLastName").val('');
         $("#editAge").val('');
 
-        const id = $(this).data('edit-id')
-        $.get('/home/getpersonbyid', {id}, function (person) {
+        const id = $(this).data('edit-id');
+        $.get('/home/getpersonbyid', { id }, function (person) {
+            $("#editId").val(id);
             $("#editFirstName").val(person.firstName);
             $("#editLastName").val(person.lastName);
             $("#editAge").val(person.age);
             editModal.show();
         });
     })
+
+    $("#edit-person").on('click', function () {
+        const id = $("#editId").val();
+        const firstName = $("#editFirstName").val();
+        const lastName = $("#editLastName").val();
+        const age = $("#editAge").val();
+
+        $.post('/home/editperson', { id, firstName, lastName, age }, function () {
+            console.log("edited");
+            editModal.hide();
+            refreshTable();
+        });
+    })
+
+    $("tbody").on('click', '#delete', function () {
+        const id = $(this).data('delete-id');
+        $.post('/home/deletebyid', { id }, function () {
+            refreshTable();
+        });
+    });
 })

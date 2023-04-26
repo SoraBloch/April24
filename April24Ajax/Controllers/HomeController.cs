@@ -30,5 +30,17 @@ namespace April24Ajax.Controllers
             
             return Json(repo.GetPersonById(id));
         }
+        [HttpPost]
+        public void EditPerson(Person person)
+        {
+            var repo = new PeopleRepo(_connectionString);
+            repo.EditPerson(person);
+        }
+        [HttpPost]
+        public void DeleteById(int id)
+        {
+            var repo = new PeopleRepo(_connectionString);
+            repo.DeleteById(id);
+        }
     }
 }

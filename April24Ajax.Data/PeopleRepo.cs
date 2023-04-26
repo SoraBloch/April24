@@ -63,5 +63,30 @@ namespace April24Ajax.Data
             connection.Close();
             return p;
         }
+        public void EditPerson(Person p)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            using var command = connection.CreateCommand();
+            command.CommandText = "UPDATE People SET FirstName = @firstName, LastName = @lastName, Age = @age " +
+                "WHERE Id = @id";
+            command.Parameters.AddWithValue("@firstName", p.FirstName);
+            command.Parameters.AddWithValue("@lastName", p.LastName);
+            command.Parameters.AddWithValue("@age", p.Age);
+            command.Parameters.AddWithValue("@id", p.Id);
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+        public void DeleteById(int id)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            using var command = connection.CreateCommand();
+            command.CommandText = "DELETE FROM People " +
+                "WHERE Id = @id";
+            command.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
     }
 }
